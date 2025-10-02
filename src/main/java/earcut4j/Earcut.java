@@ -427,11 +427,18 @@ public final class Earcut {
 
             @Override
             public int compare(Node o1, Node o2) {
-                if (o1.x - o2.x > 0)
-                    return 1;
-                else if (o1.x - o2.x < 0)
-                    return -2;
-                return 0;
+                double result = o1.x - o2.x;
+                // when the left-most point of 2 holes meet at a vertex, sort the holes counterclockwise so that when we find
+                // the bridge to the outer shell is always the point that they meet at.
+                if (result == 0) {
+                    result = o1.y - o2.y;
+                    if (result == 0) {
+                        double aSlope = (o1.next.y - o1.y) / (o1.next.x - o1.x);
+                        double bSlope = (o2.next.y - o2.y) / (o2.next.x - o2.x);
+                        result = aSlope - bSlope;
+                    }
+                }
+                return result > 0 ? 1 : (result < 0 ? -1 : 0);
             }
         });
 
@@ -521,18 +528,16 @@ public final class Earcut {
         // find a segment intersected by a ray from the hole's leftmost point to
         // the left;
         // segment's endpoint with lesser x will be potential connection point
+        // unless they intersect at a vertex, then choose the vertex
+        if (equals(hole, p)) return p;
         do {
-            if (hy <= p.y && hy >= p.next.y) {
+            if (equals(hole, p.next)) return p.next;
+            else if (hy <= p.y && hy >= p.next.y && p.next.y != p.y) {
                 double x = p.x + (hy - p.y) * (p.next.x - p.x) / (p.next.y - p.y);
                 if (x <= hx && x > qx) {
                     qx = x;
-                    if (x == hx) {
-                        if (hy == p.y)
-                            return p;
-                        if (hy == p.next.y)
-                            return p.next;
-                    }
                     m = p.x < p.next.x ? p : p.next;
+                    if (x == hx) return m; // hole touches outer segment; pick leftmost endpoint
                 }
             }
             p = p.next;
@@ -559,7 +564,8 @@ public final class Earcut {
         p = m;
 
         do {
-            if (hx >= p.x && p.x >= mx && pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
+            if (hx >= p.x && p.x >= mx && hx != p.x &&
+                pointInTriangle(hy < my ? hx : qx, hy, mx, my, hy < my ? qx : hx, hy, p.x, p.y)) {
 
                 tan = Math.abs(hy - p.y) / (hx - p.x); // tangential
 

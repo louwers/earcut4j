@@ -82,66 +82,6 @@ public class JavaScriptTestSuite {
      * @return true if test passed, false if skipped
      */
     private boolean runFixtureTest(String fixtureName) throws IOException {
-        // Skip known problematic tests
-        if ("steiner".equals(fixtureName)) {
-            System.out.println("Skipping Steiner test - known difference in implementation");
-            return false;
-        }
-        
-        // Special handling for issue111 - produces 19 triangles instead of 18 but is geometrically correct
-        if ("issue111".equals(fixtureName)) {
-            JavaScriptTestData.FlattenedData data = JavaScriptTestData.loadFixture(fixtureName);
-            List<Integer> triangles = Earcut.earcut(data.vertices, data.holes, data.dimensions);
-            double deviation = Earcut.deviation(data.vertices, data.holes, data.dimensions, triangles);
-
-            if (deviation < 1e-10 && triangles.size() / 3 == 19) {
-                System.out.println("Fixture " + fixtureName + " passed! (geometrically correct - 19 triangles)");
-                return true;
-            } else {
-                Assert.fail("Issue111 failed: deviation=" + deviation + ", triangles=" + (triangles.size() / 3));
-            }
-        }
-
-        // Special handling for touching-holes3 - complex edge case with many holes that requires further investigation
-        if ("touching-holes3".equals(fixtureName)) {
-            System.out.println("Skipping touching-holes3 test - complex edge case requiring further investigation");
-            return false;
-        }
-
-        // Special handling for touching-holes2 - similar issue with hole handling
-        if ("touching-holes2".equals(fixtureName)) {
-            System.out.println("Skipping touching-holes2 test - similar hole handling issue");
-            return false;
-        }
-
-        // Special handling for touching-holes6 - similar issue with hole handling
-        if ("touching-holes6".equals(fixtureName)) {
-            System.out.println("Skipping touching-holes6 test - similar hole handling issue");
-            return false;
-        }
-
-        // Special handling for touching-holes5 - similar issue with hole handling
-        if ("touching-holes5".equals(fixtureName)) {
-            System.out.println("Skipping touching-holes5 test - similar hole handling issue");
-            return false;
-        }
-
-        // Special handling for touching4 - produces 20 triangles instead of 19 but is geometrically correct
-        if ("touching4".equals(fixtureName)) {
-            JavaScriptTestData.FlattenedData data = JavaScriptTestData.loadFixture(fixtureName);
-            List<Integer> triangles = Earcut.earcut(data.vertices, data.holes, data.dimensions);
-            double deviation = Earcut.deviation(data.vertices, data.holes, data.dimensions, triangles);
-
-            if (deviation < 1e-10 && triangles.size() / 3 == 20) {
-                System.out.println("Fixture " + fixtureName + " passed! (geometrically correct - 20 triangles)");
-                return true;
-            } else {
-                Assert.fail("Touching4 failed: deviation=" + deviation + ", triangles=" + (triangles.size() / 3));
-            }
-        }
-        
-        
-        
         JavaScriptTestData.FlattenedData data = JavaScriptTestData.loadFixture(fixtureName);
         List<Integer> triangles = Earcut.earcut(data.vertices, data.holes, data.dimensions);
         
