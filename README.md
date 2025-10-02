@@ -75,22 +75,3 @@ Run all tests:
 ```bash
 mvn test
 ```
-
-This runs comprehensive tests including:
-
-- **Basic functionality tests** (7 tests) - Core polygon triangulation features
-- **JavaScript compatibility tests** (52 test fixtures) - Full compatibility with the original [mapbox/earcut](https://github.com/mapbox/earcut) implementation
-
-**Test Results:**
-- ✅ **47 tests passed** - Including complex polygons, holes, and large datasets
-- ⚠️ **5 tests skipped** - Complex edge cases with known implementation differences
-- ❌ **0 tests failed** - All critical functionality working correctly
-
-The test suite validates triangle count accuracy and triangulation quality using the same test cases as the JavaScript version. The implementation demonstrates high compatibility with the original, handling complex geometric shapes, polygons with holes, and edge cases effectively.
-
-**Test Coverage:**
-- Simple and complex polygons
-- Polygons with multiple holes
-- Large datasets (5000+ triangles)
-- Edge cases and boundary conditions
-- Geometric accuracy validation using deviation calculation
