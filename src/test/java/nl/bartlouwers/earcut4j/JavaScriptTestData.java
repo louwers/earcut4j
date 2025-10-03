@@ -1,4 +1,4 @@
-package earcut4j;
+package nl.bartlouwers.earcut4j;
 
 import java.io.BufferedReader;
 import java.io.IOException;
