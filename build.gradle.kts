@@ -50,9 +50,9 @@ mavenPublishing {
         url = "https://github.com/louwers/earcut4j/"
         licenses {
             license {
-                name = "The Apache License, Version 2.0"
-                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                name = "ISC License"
+                url = "https://github.com/louwers/earcut4j/blob/main/LICENSE"
+                distribution = "https://github.com/louwers/earcut4j/blob/main/LICENSE"
             }
         }
         developers {
