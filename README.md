@@ -1,6 +1,6 @@
 ## earcut4j
 
-![Maven Central Version](https://img.shields.io/maven-central/v/nl.bartlouwers/earcut4j)
+[![Maven Central Version](https://img.shields.io/maven-central/v/nl.bartlouwers/earcut4j)](https://central.sonatype.com/artifact/nl.bartlouwers/earcut4j)
 
 This triangulation library is based on the javascript version located in [@mapbox/earcut](https://github.com/mapbox/earcut)
 
@@ -69,4 +69,5 @@ double deviation = Earcut.deviation(data, holes, dimensions, triangles);
 ```
 
 If you pass a single vertice as a hole, Earcut treats it as a Steiner point.
+
 
