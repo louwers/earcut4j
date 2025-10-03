@@ -28,19 +28,25 @@ jobs:
         java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
     
-    - name: Cache Maven dependencies
+    - name: Cache Gradle dependencies
       uses: actions/cache@v3
       with:
-        path: ~/.m2
-        key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-        restore-keys: ${{ runner.os }}-m2
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+    
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
     
     - name: Run tests
-      run: mvn clean test
+      run: ./gradlew clean test
     
     - name: Upload test results
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-results-java-${{ matrix.java-version }}
-        path: target/surefire-reports/
+        path: build/reports/tests/test/
