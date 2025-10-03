@@ -1,0 +1,11 @@
+[versions]
+junit = "5.10.1"
+jackson-databind = "2.15.2"
+
+[libraries]
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junit" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+jackson-databind = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson-databind" }
+
+[bundles]
+test = ["junit-jupiter", "jackson-databind"]
