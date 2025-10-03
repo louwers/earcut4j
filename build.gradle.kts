@@ -38,7 +38,7 @@ val versionProvider = provider {
 }
 
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
     signAllPublications()
 
     coordinates("nl.bartlouwers", "earcut4j", versionProvider.get())
