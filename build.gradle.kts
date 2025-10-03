@@ -1,16 +1,15 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     java
     `java-library`
+    alias(libs.plugins.maven.publish)
 }
-
-group = "io.github.earcut4j"
-version = "2.2.3-SNAPSHOT"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     withSourcesJar()
-    withJavadocJar()
 }
 
 repositories {
@@ -25,9 +24,35 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.javadoc {
-    options {
-        source = "8"
-        (this as StandardJavadocDocletOptions).addBooleanOption("detectJavaApiLink", false)
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    coordinates("nl.bartlouwers", "earcut4j", "3.0.0")
+
+    pom {
+        name = "earcut4j"
+        description = "A Java port of the earcut polygon triangulation library, based on the JavaScript version from @mapbox/earcut"
+        inceptionYear = "2020"
+        url = "https://github.com/louwers/earcut4j/"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "louwers"
+                name = "Bart Louwers"
+                url = "https://github.com/louwers/"
+            }
+        }
+        scm {
+            url = "https://github.com/louwers/earcut4j/"
+            connection = "scm:git:git://github.com/louwers/earcut4j.git"
+            developerConnection = "scm:git:ssh://git@github.com/louwers/earcut4j.git"
+        }
     }
 }
