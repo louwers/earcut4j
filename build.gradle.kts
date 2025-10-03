@@ -6,28 +6,8 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
-// Function to get version from Git tag
-fun getVersionFromTag(): String {
-    return try {
-        val process = ProcessBuilder("git", "describe", "--tags", "--exact-match", "HEAD")
-            .redirectOutput(ProcessBuilder.Redirect.PIPE)
-            .redirectError(ProcessBuilder.Redirect.PIPE)
-            .start()
-        
-        val output = process.inputStream.bufferedReader().readText().trim()
-        val exitCode = process.waitFor()
-        
-        if (exitCode == 0 && output.startsWith("v")) {
-            output.substring(1) // Remove 'v' prefix
-        } else {
-            "3.0.0" // fallback version
-        }
-    } catch (e: Exception) {
-        "3.0.0" // fallback version
-    }
-}
+apply(from = "version.gradle.kts")
 
-val projectVersion = getVersionFromTag()
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
@@ -47,11 +27,21 @@ tasks.test {
     useJUnitPlatform()
 }
 
+// Create a lazy version provider that only executes during publishing
+val versionProvider = provider {
+    if (gradle.startParameter.taskNames.any { it.contains("publish") }) {
+        val getVersionFunc = extra["getVersionFromGitTag"] as () -> String
+        getVersionFunc()
+    } else {
+        "3.0.0" // fallback for non-publishing tasks
+    }
+}
+
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("nl.bartlouwers", "earcut4j", projectVersion)
+    coordinates("nl.bartlouwers", "earcut4j", versionProvider.get())
 
     pom {
         name = "earcut4j"
