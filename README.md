@@ -24,7 +24,7 @@ Download the latest version:
 <dependency>
   <groupId>nl.bartlouwers</groupId>
   <artifactId>earcut4j</artifactId>
-  <version>2.2.2</version>
+  <version>3.0.0</version>
 </dependency>
 ```
        
@@ -32,7 +32,7 @@ Download the latest version:
 
 ```groovy
 dependencies {
-  compile "nl.bartlouwers:earcut4j:2.2.2"
+  compile "nl.bartlouwers:earcut4j:3.0.0"
 }
 ```
 
