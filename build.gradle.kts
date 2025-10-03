@@ -6,6 +6,29 @@ plugins {
     alias(libs.plugins.maven.publish)
 }
 
+// Function to get version from Git tag
+fun getVersionFromTag(): String {
+    return try {
+        val process = ProcessBuilder("git", "describe", "--tags", "--exact-match", "HEAD")
+            .redirectOutput(ProcessBuilder.Redirect.PIPE)
+            .redirectError(ProcessBuilder.Redirect.PIPE)
+            .start()
+        
+        val output = process.inputStream.bufferedReader().readText().trim()
+        val exitCode = process.waitFor()
+        
+        if (exitCode == 0 && output.startsWith("v")) {
+            output.substring(1) // Remove 'v' prefix
+        } else {
+            "3.0.0" // fallback version
+        }
+    } catch (e: Exception) {
+        "3.0.0" // fallback version
+    }
+}
+
+val projectVersion = getVersionFromTag()
+
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -28,7 +51,7 @@ mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
 
-    coordinates("nl.bartlouwers", "earcut4j", "3.0.0")
+    coordinates("nl.bartlouwers", "earcut4j", projectVersion)
 
     pom {
         name = "earcut4j"
